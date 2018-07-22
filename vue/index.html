@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>index</title>
+<script src="vue.js"></script>
+</head>
+<body>
+    <header></header>
+    <main>
+    <div id="app-1">
+            <one-article v-for="post in posts" v-bind:key="post.id" v-bind:post="post"></one-article>
+    </div>
+    </main>
+    <aside>
+    </aside>
+    <footer>
+    </footer>
+    <script>
+        Vue.component('one-article',{
+           props:['post'],
+           template:'<div><h4>{{post.title}}</h4><p>{{post.content}}</p></div>'
+        })
+
+        new Vue({
+            el:'#app-1',
+            data:{
+                posts:[]
+            },
+            created:function(){
+                //get data
+                var vm = this
+                vm.posts = [
+                    {id:1,title:'one',content:'--111'},
+                    {id:2,title:'two',content:'--222'},
+                    {id:3,title:'three',content:'--333'},
+                    {id:4,title:'four',content:'--444'},
+                    {id:5,title:'five',content:'--555'},
+                ]
+                console.log(vm.posts)
+                console.log(this.posts)
+            }
+        })
+    </script>
+</body>
