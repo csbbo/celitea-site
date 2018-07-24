@@ -37,5 +37,15 @@
 //-------------
 服务器登陆状态返回
 {
-    userStatis:'true' || userStatis:'false'
+    userStatis:'true' || userStatis:'false',
+    userName:''
+}
+//------------
+客户端注销状态发送
+{
+    logout:'true'
+}
+服务器注销状态返回
+{
+    logout:'true'
 }
