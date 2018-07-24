@@ -17,7 +17,7 @@ export default {
     data:function(){
         var Login_status = false
         //get login status
-        fetch(localhost.login_status,{
+        fetch(ccssbb.cn/login_status,{
             method:"post"
         }).then(function(response){
             return response.json()
@@ -37,7 +37,7 @@ export default {
             var post = {
                 lgout:'true'
             }
-            fetch(localhost.logout,{
+            fetch(ccssbb.cn/logout,{
                 method:"post",
                 body:post
             }).then(function(response){

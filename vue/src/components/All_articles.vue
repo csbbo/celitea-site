@@ -13,7 +13,7 @@
     export default{
         data:function(){
              //get data
-            fetch(localhost.index,{
+            fetch(ccssbb.cn/index,{
                 method:"get"
             }).then(function(response){
                 return response.json()

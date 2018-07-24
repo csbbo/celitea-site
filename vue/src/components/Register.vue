@@ -33,7 +33,7 @@ export default {
                     userIdentifyingCode:register.userIdentifyingCode.value
                 }
             };
-            fetch(localhost.register,{
+            fetch(ccssbb.cn/regist,{
                 method:"post",
                 body:post
             }).then(function(response){
