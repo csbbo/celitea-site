@@ -9,12 +9,6 @@ import json
 # 测试
 @main.route('/test',methods=['POST','GET'])
 def test():
-    d = {'name': 'xmr', 'age': 18}
-    return json.dumps(d)
-
-# 注册
-@main.route('/regist',methods=['POST'])
-def regist():
     username = request.form.get('username')
     password = request.form.get('password')
     phone_num = request.form.get('phone_num')
@@ -22,37 +16,56 @@ def regist():
     print(username)
     print(password)
     print(phone_num)
-    user = User.query.filter(User.phone_num == phone_num).first()
-    if user:            #手机号已经被使用
-        return json.dumps({'state':'fail'})
+    return json.dumps({'state':'ok'})
+
+# 首页
+@main.route('/',methods=['GET'])
+def index():
+    articles = Article.query.all()
+    return json.dumps(articles)
+
+# 注册
+@main.route('/regist',methods=['POST'])
+def regist():
+    username = request.form.get('userName')
+    password = request.form.get('userPassword')
+    phone_num = request.form.get('userPhoneNumber')
+    sms = request.form.get('userIdentifyingCode')
+    if sms == '0000':
+        user = User.query.filter(User.phone_num == phone_num).first()
+        if user:            #手机号已经被使用
+            return json.dumps({'registerStatus':'fail'})
+        else:
+            user = User(username=username,password=password,phone_num=phone_num)
+            db.session.add(user)
+            db.session.commit()
+            session['user_id'] = user.id
+            session.permanent = True
+            return json.dumps({'registerStatus':'success'})
     else:
-        user = User(username=username,password=password,phone_num=phone_num)
-        db.session.add(user)
-        db.session.commit()
-        session['user_id'] = user.id
-        session.permanent = True
-        return json.dumps({'state':'ok'})
-        # return "successs!"
+        return json.dumps({'registerStatus':'wrongCode'})
 
 # 登录
 @main.route('/login/',methods=['POST'])
 def login():
-    phone_num = request.form.get('phone_num')
-    password = request.form.get('password')
-    user = User.query.filter(User.phone==phone).first()
+    phone_num = request.form.get('userPhoneNumber')
+    password = request.form.get('userPassword')
+    user = User.query.filter(User.phone_num==phone_num).first()
     if user and user.verify_password(password):
         session['user_id'] = user.id
         session.permanent = True
-        return json.dumps({'state':'ok'})
+        return json.dumps({'loginStatus':'true','userName':user.username})
     else:
-        return json.dumps({'state':'fail'})
+        return json.dumps({'loginStatus':'false'})
 
 # 注销
 @main.route('/logout/',methods=['POST'])
 def logout():
-    if hasattr(g,'user'):
-        session.pop('user_id')
-    return json.dumps({'state':'ok'})
+    out = request.form.get('logout')
+    if out == 'true':
+        if hasattr(g,'user'):
+            session.pop('user_id')
+    return json.dumps({'logout':'true'})
 
 
 #########################################################
