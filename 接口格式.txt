@@ -1,0 +1,41 @@
+
+//--------------------
+服务器首页文章返回
+{
+    posts:[
+        {id:'1',title:'xxx',introduce:'xxx'},
+        {id:'2',title:'xxx',introduce:'xxx'},
+        ...
+    ]
+};
+//--------------
+客户端注册信息发送
+{
+    user:{
+        userName:'',
+        userPassword:'',
+        userPhoneNumber:'',
+        userIdentifyingCode:''
+    }
+}
+服务器注册状态返回
+{
+    registerStatus:'success'|| registerStatus:'fail'|| registerStatus :'wrongCode'
+}
+//----------------------
+客户端登陆信息发送
+{
+    user:{
+        userPhoneNumber:'',
+        userPassword:''
+    }
+}
+服务器登陆信息返回
+{
+    loginStatus:'success'|| loginStatus:'fail'
+}
+//-------------
+服务器登陆状态返回
+{
+    userStatis:'true' || userStatis:'false'
+}
