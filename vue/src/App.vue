@@ -1,25 +1,32 @@
 <template>
   <div id="app">
-    <a href="#/"><img src="./assets/logo.png"></a>
-    <router-view/>
+    <el-container>
+    <el-header>
+      <header-mnue></header-mnue>
+    </el-header>
+    <el-container>
+        <el-main>
+            <router-view/>
+        </el-main>
+    </el-container>
+    </el-container>
   </div>
 </template>
 
 <script>
-/* eslint-disable */
+import headermnue from './page/login_status'
+
 
 export default {
-  name: 'App'
+  name: 'App',
+  components:{
+    'header-mnue':headermnue,
+  }
 }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+
 </style>
+
+

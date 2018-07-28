@@ -12,18 +12,21 @@
 /* eslint-disable */
     export default{
         data:function(){
+            var posts
              //get data
-            fetch(ccssbb.cn/index,{
+            fetch('http://ccssbb.cn/index',{
                 method:"get"
             }).then(function(response){
                 return response.json()
             }).then(function(json){
-                var posts = json.posts
+                posts = json.posts
             })
            //---------------
             console.log("posts")
             //-----------------
-            return posts
+            return {
+                posts:posts
+            }
         }
     }
 </script>

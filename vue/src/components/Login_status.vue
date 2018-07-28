@@ -16,14 +16,15 @@
 export default {
     data:function(){
         var Login_status = false
+        var get_userName = ''
         //get login status
-        fetch(ccssbb.cn/login_status,{
+        fetch('http://ccssbb.cn/login_status',{
             method:"post"
         }).then(function(response){
             return response.json()
         }).then(function(json){
             Login_status = json.login_Status
-            var get_userName = json.userName
+            get_userName = json.userName
         })
         return {
             isLogin:Login_status,
@@ -37,7 +38,7 @@ export default {
             var post = {
                 lgout:'true'
             }
-            fetch(ccssbb.cn/logout,{
+            fetch('http://ccssbb.cn/logout',{
                 method:"post",
                 body:post
             }).then(function(response){

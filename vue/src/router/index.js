@@ -1,10 +1,8 @@
-/* eslint-disable */
-
 import Vue from 'vue'
 import Router from 'vue-router'
-import index from '../pages/index.vue'
-import Login_page from '../pages/Login_page.vue'
-import Register_page from '../pages/Register_page.vue'
+import index from '../page/index'
+import register from '../page/register'
+import login from '../page/login'
 
 Vue.use(Router)
 
@@ -17,13 +15,13 @@ export default new Router({
     },
     {
       path:'/register',
-      name:'Register',
-      component:Register_page
+      name:'register',
+      component:register
     },
     {
       path:'/login',
-      name:'Login',
-      component:Login_page
+      name:login,
+      component:login
     }
   ]
 })

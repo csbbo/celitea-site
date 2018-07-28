@@ -25,7 +25,7 @@ export default {
                     userPassword:Login.userPassword.value
                 }
             }
-            fetch(ccssbb.cn/login,{
+            fetch('http://ccssbb.cn/login',{
                 method:"post",
                 body:post
             }).then(function(response){
