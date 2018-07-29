@@ -7,16 +7,15 @@ from flask_login import login_required
 import json
 
 # 测试
-@main.route('/test',methods=['POST','GET'])
+@main.route('/test/',methods=['POST','GET'])
 def test():
     username = request.form.get('username')
     password = request.form.get('password')
     phone_num = request.form.get('phone_num')
-    print('############################################################')
     print(username)
     print(password)
     print(phone_num)
-    return json.dumps({'state':'ok'})
+    return json.dumps({'state':'shaobo yes'})
 
 # 首页
 @main.route('/',methods=['GET'])
@@ -25,7 +24,7 @@ def index():
     return json.dumps(articles)
 
 # 注册
-@main.route('/regist',methods=['POST'])
+@main.route('/regist/',methods=['POST'])
 def regist():
     username = request.form.get('userName')
     password = request.form.get('userPassword')
