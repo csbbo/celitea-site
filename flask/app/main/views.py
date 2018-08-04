@@ -1,21 +1,26 @@
-from flask import render_template,request,redirect,session,g,url_for
+from flask import render_template,request,redirect,session,g,url_for,current_app
 from . import main
 from ..models import User,Article,Apply
 from .. import db
 from datetime import datetime
 from flask_login import login_required
 import json
+from .useJWT import make_jwt,verify_tokent
 
 # 测试
 @main.route('/test/',methods=['POST','GET'])
 def test():
-    username = request.form.get('username')
-    password = request.form.get('password')
-    phone_num = request.form.get('phone_num')
+    user_agent = request.headers.get("User-Agent")
+    # username = request.form.get('username')
+    # password = request.form.get('password')
+    username = "chen"
+    phone_num = "13978901767"
     print(username)
-    print(password)
     print(phone_num)
-    return json.dumps({'state':'shaobo yes'})
+    print(user_agent)
+    token = make_jwt(username,phone_num)
+    token = token.decode('ascii')
+    return json.dumps({'state':'shaobo yes',"token":token})
 
 # 首页
 @main.route('/',methods=['GET'])
@@ -36,11 +41,9 @@ def regist():
             return json.dumps({'registerStatus':'fail'})
         else:
             user = User(username=username,password=password,phone_num=phone_num)
-            db.session.add(user)
-            db.session.commit()
-            session['user_id'] = user.id
-            session.permanent = True
-            return json.dumps({'registerStatus':'success'})
+            token = make_jwt(username, phone_num)
+            token = token.decode('ascii')
+            return json.dumps({'registerStatus':'success',"token":token})
     else:
         return json.dumps({'registerStatus':'wrongCode'})
 

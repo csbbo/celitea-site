@@ -1,12 +1,12 @@
-from flask import render_template
+from flask import make_response,jsonify
 from . import main
 
 
 @main.app_errorhandler(404)
 def page_not_found(e):
-    return "404fail"
+    return make_response(jsonify({"error":"Not found"}),404)
 
 
 @main.app_errorhandler(500)
 def internal_server_error(e):
-    return "500fail"
+    return make_response(jsonify({"error":"Server Error"}),500)
