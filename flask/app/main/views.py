@@ -55,10 +55,7 @@ def regist():
 def login():
     phone_num = request.form.get('userPhoneNumber')
     password = request.form.get('userPassword')
-    print(phone_num)
-    print(password)
     user = User.query.filter(User.phone_num==phone_num).first()
-    print(user)
     if user and user.verify_password(password):
         token = make_jwt(user.username,phone_num)
         token = token.decode('ascii')
@@ -90,17 +87,17 @@ def apply_port():
 
 #########################################################
 # 作用于每次请求之前
-@main.before_request
-def my_before_request():
-        user_id = session.get('user_id')
-        if user_id:         #本次请求用户存在
-                user = User.query.filter(User.id==user_id).first()
-                if user:    #数据库中存在该用户
-                    g.user = user #将该用户置入全局变量g
+# @main.before_request
+# def my_before_request():
+#         user_id = session.get('user_id')
+#         if user_id:         #本次请求用户存在
+#                 user = User.query.filter(User.id==user_id).first()
+#                 if user:    #数据库中存在该用户
+#                     g.user = user #将该用户置入全局变量g
 
-# 上下文处理器---在模板中使用
-@main.context_processor
-def my_context_processor():
-        if hasattr(g,'user'):
-                return {'user':g.user}
-        return {}
+# # 上下文处理器---在模板中使用
+# @main.context_processor
+# def my_context_processor():
+#         if hasattr(g,'user'):
+#                 return {'user':g.user}
+#         return {}
