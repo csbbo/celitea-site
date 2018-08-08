@@ -10,14 +10,17 @@ from .useJWT import make_jwt,verify_tokent
 # 测试
 @main.route('/test/',methods=['POST','GET'])
 def test():
+    allow = request.headers.get('Accept')
+    content_encoding = request.headers.get('Accept-Encoding')
+    content_length = request.headers.get('Connection')
     user_agent = request.headers.get("User-Agent")
+    content_type = request.headers.get('Cookie')
+    authorization = request.headers.get('WWW-Authenticate')
     # username = request.form.get('username')
     # password = request.form.get('password')
     username = "chen"
     phone_num = "13978901767"
-    print(username)
-    print(phone_num)
-    print(user_agent)
+    print("###################################")
     token = make_jwt(username,phone_num)
     token = token.decode('ascii')
     return json.dumps({'state':'shaobo yes',"token":token})
@@ -41,9 +44,9 @@ def regist():
             return json.dumps({'registerStatus':'fail'})
         else:
             user = User(username=username,password=password,phone_num=phone_num)
-            token = make_jwt(username, phone_num)
-            token = token.decode('ascii')
-            return json.dumps({'registerStatus':'success',"token":token})
+            db.session.add(user)
+            db.session.commit()
+            return json.dumps({'registerStatus':'success'})
     else:
         return json.dumps({'registerStatus':'wrongCode'})
 
@@ -52,11 +55,14 @@ def regist():
 def login():
     phone_num = request.form.get('userPhoneNumber')
     password = request.form.get('userPassword')
+    print(phone_num)
+    print(password)
     user = User.query.filter(User.phone_num==phone_num).first()
+    print(user)
     if user and user.verify_password(password):
-        session['user_id'] = user.id
-        session.permanent = True
-        return json.dumps({'loginStatus':'true','userName':user.username})
+        token = make_jwt(user.username,phone_num)
+        token = token.decode('ascii')
+        return json.dumps({'loginStatus':'true','userName':user.username,"token":token})
     else:
         return json.dumps({'loginStatus':'false'})
 
@@ -69,9 +75,21 @@ def logout():
             session.pop('user_id')
     return json.dumps({'logout':'true'})
 
+# 报名接口
+@main.route('/apply_port/',methods=['POST'])
+def apply_port():
+    token = request.headers.get('Authorization')
+    token = token.encode('ascii')
+    if verify_tokent(token):
+        return json.dump({'loginStatu':'success'})
+    else:
+        return json.dump({'loginStatu':'fail'})
+
+
+        
 
 #########################################################
-# 每次请求之前
+# 作用于每次请求之前
 @main.before_request
 def my_before_request():
         user_id = session.get('user_id')
