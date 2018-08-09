@@ -49,3 +49,21 @@
 {
     logout:'true'
 }
+//报名表
+请求字段:
+name
+stu_num
+phone
+email
+introduction
+skill
+want_learn
+think_celitea
+avatar_url
+token   //在请求头部
+
+token认证失败即未登录状态返回
+{'apply':'success'}
+
+报名成功返回
+{'loginStatu':'fail'}

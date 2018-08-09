@@ -95,7 +95,28 @@ def apply_port():
 # 报名表
 @main.route('/applications/',methods=['POST'])
 def applications():
-    pass
+    name = request.form.get('name')
+    stu_num = request.form.get('stu_num')
+    phone = request.form.get('phone')
+    email = request.form.get('email')
+    introduction = request.form.get('introduction')
+    skill = request.form.get('skill')
+    want_learn = request.form.get('want_learn')
+    think_celitea = request.form.get('think_celitea')
+    avatar_url = request.form.get('avatar')
+    token = request.headers.get('Authorization')
+    token = token.encode('ascii')
+    payload = verify_tokent(token)
+    if payload:
+        user_phone = payload['phone_num']
+        user = User.query.filter(User.phone_num==user_phone).first()
+        apply = Apply(name=name,stu_num=stu_num,phone=phone,email=email,introduction=introduction, \
+                skill=skill,want_learn=want_learn,think_celitea=think_celitea,avatar_url=avatar_url,user_id=user.id)
+        db.session.add(apply)
+        db.session.commit()
+        return json.dump({'apply':'success'})
+    else:
+        return json.dump({'loginStatu':'fail'})
 
 # 管理页面
 @main.route('/admin/',methods=['GET'])
