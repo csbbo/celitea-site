@@ -46,7 +46,7 @@ export default {
         },
         Signout()
         {
-            if(store.state.token === '')
+            if(localStorage.token === '')
                 router.push('register')
             else{
                 store.commit('clear_login_status')
@@ -56,7 +56,7 @@ export default {
     },
     computed:{
         fi:function(){
-            if(store.state.userName === ''){
+            if(store.state.token === ''){
                 this.se = "login",
                 this.th = "register"
                 return "Please login"
@@ -64,7 +64,7 @@ export default {
             else {
                 this.se = "Main",
                 this.th = "Signout"
-                return store.state.userName
+                return localStorage.userName
             }   
                 
         }

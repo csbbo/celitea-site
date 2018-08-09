@@ -14,7 +14,8 @@ export default {
     methods:{
         enroll()
         {
-            if(store.token === ''){
+            
+            if(store.state.token === ''){
                 alert("请登陆之后再操作")
                 this.$router.push('')  
             }

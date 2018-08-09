@@ -10,18 +10,16 @@ const store = new Vuex.Store({
         token:''
     },
     mutations:{
-        note_login_status(state,userName,token){
-            console.log(userName)
+        note_login_status(state,userName){
             localStorage.userName = userName
-            console.log(token)
-            localStorage.token = token
             state.userName = userName
-            state.token = token
+            state.token = localStorage.token
         },
         clear_login_status(state){
             localStorage.clear()
             state.userName = ''
             state.token = ''
+            console.log(state)
         }
     },
     getters:{

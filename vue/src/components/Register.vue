@@ -2,7 +2,7 @@
   <div id="register-div">
     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
         <b-form-group id="exampleInputGroup1"
-                    label="You Phone Number:"
+                    label="电话号码:"
                     label-for="exampleInput1"
                     description="We'll never share your number with anyone else.">
         <b-form-input id="exampleInput1"
@@ -13,7 +13,7 @@
         </b-form-input>
         </b-form-group>
         <b-form-group id="exampleInputGroup2"
-                    label="Your Name:"
+                    label="用户名:"
                     label-for="exampleInput2">
         <b-form-input id="exampleInput2"
                       type="text"
@@ -22,7 +22,7 @@
                       placeholder="Enter name">
         </b-form-input>
         </b-form-group>
-        <b-form-group label="Your password"
+        <b-form-group label="密码"
                     label-for="exampleInput2">
         <b-form-input type="password"
                     v-model="form.userPassword"
@@ -30,16 +30,16 @@
                     placeholder="Enter password">
         </b-form-input>
         </b-form-group>
-        <b-form-group label="Identifying code">
+        <b-form-group label="验证码">
             <b-form-input type="text"
                          v-model="form.userIdentifyingCode"
                          required
                         placeholder="Enter code">
             </b-form-input>
-            <b-button type="getIdentifyCode">Get</b-button>
+            <b-button type="getIdentifyCode">获取</b-button>
         </b-form-group>
-        <b-button type="submit" variant="primary">Submit</b-button>
-        <b-button type="reset" variant="danger">Reset</b-button>
+        <b-button type="提交" variant="primary">Submit</b-button>
+        <b-button type="重置" variant="danger">Reset</b-button>
     </b-form>
   </div>
 </template>

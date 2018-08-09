@@ -14,7 +14,7 @@ import Aside from './components/aside.vue'
 
 export default {
   name: 'app',
-  components:{
+  components:{ 
     'nav-bar':NavBar,
     'aside-part':Aside
   }

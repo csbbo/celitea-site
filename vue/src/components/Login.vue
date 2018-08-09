@@ -2,9 +2,8 @@
   <div id="register-div">
     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
         <b-form-group id="exampleInputGroup1"
-                    label="You Phone Number:"
-                    label-for="exampleInput1"
-                    description="We'll never share your number with anyone else.">
+                    label="电话号码:"
+                    label-for="exampleInput1">
         <b-form-input id="exampleInput1"
                       type="tel"
                       v-model="form.userPhoneNumber"
@@ -12,7 +11,7 @@
                       placeholder="Enter phonenumber">
         </b-form-input>
         </b-form-group>
-        <b-form-group label="Your password"
+        <b-form-group label="密码"
                     label-for="exampleInput2">
         <b-form-input type="password"
                     v-model="form.userPassword"
@@ -58,7 +57,8 @@ export default {
       }).then(function(json){
         if(json.loginStatus === "true"){
           console.log(json.token)
-          store.commit('note_login_status',json.userName,json.token)
+          localStorage.token = json.token
+          store.commit('note_login_status',json.userName)
           alert("Login Success !")
           router.push('/')
         }
