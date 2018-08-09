@@ -31,6 +31,7 @@ def load_user(user_id):
 class Article(db.Model):
     __tablename__ = 'article'
     id = db.Column(db.Integer, primary_key=True)
+    article_title = db.Column(db.String(30),nullable=False)
     article = db.Column(db.Text,nullable=False)
     create_time = db.Column(db.DateTime,default=datetime.now)
     user_id = db.Column(db.Integer,db.ForeignKey('user.id'))

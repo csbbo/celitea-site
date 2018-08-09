@@ -59,11 +59,26 @@ introduction
 skill
 want_learn
 think_celitea
-avatar_url
-token   //在请求头部
+avatar
+Authorization  //token 在请求头部
 
 token认证失败即未登录状态返回
-{'apply':'success'}
+{'loginStatu':'fail'}
 
 报名成功返回
+{'apply':'success'}
+
+//添加文章
+请求字段:
+article_title  //文章标题
+article        //文章内容
+Authorization  //token 在请求头部
+
+token认证失败即未登录状态返回
 {'loginStatu':'fail'}
+
+非管理员文章添加失败
+{'add_article':'fail'}
+
+管理员添加文章成功
+{'add_article':'success'}

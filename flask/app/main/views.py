@@ -126,7 +126,23 @@ def is_admin():
 # 添加文章
 @main.route('/articles/',methods=['POST'])
 def articles():
-    pass
+    article_title = request.form.get('article_title')
+    article = request.form.get('article')
+    token = request.headers.get('Authorization')
+    token = token.encode('ascii')
+    payload = verify_tokent(token)
+    if payload:
+        user_phone = payload['phone_num']
+        user = User.query.filter(User.phone_num==user_phone).first()
+        if user.admin == 'True':
+            article = Article(article_title=article_title,article=article,user_id=user.id)
+            db.session.add(article)
+            db.session.commit()
+            return json.dump({'add_article':'success'})
+        else:
+            return json.dump({'add_article':'fail'})
+    else:
+        return json.dump({'loginStatu':'fail'})
 
 # 修改文章
 @main.route('/mod_articles/',methods=['POST'])
