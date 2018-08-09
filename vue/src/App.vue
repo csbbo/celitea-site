@@ -1,32 +1,25 @@
 <template>
-  <div id="app">
-    <el-container>
-    <el-header>
-      <header-mnue></header-mnue>
-    </el-header>
-    <el-container>
-        <el-main>
-            <router-view/>
-        </el-main>
-    </el-container>
-    </el-container>
+  <div id="app"> 
+    <nav-bar></nav-bar>
+    <main>
+      <aside-part></aside-part>
+      <router-view></router-view>
+    </main>
   </div>
 </template>
 
 <script>
-import headermnue from './page/login_status'
-
+import NavBar from './components/navbar.vue'
+import Aside from './components/aside.vue'
 
 export default {
-  name: 'App',
+  name: 'app',
   components:{
-    'header-mnue':headermnue,
+    'nav-bar':NavBar,
+    'aside-part':Aside
   }
 }
 </script>
 
 <style>
-
 </style>
-
-
