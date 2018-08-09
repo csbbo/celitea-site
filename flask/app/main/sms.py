@@ -27,11 +27,3 @@ def verifySmsCode(phone,checkNum):
     msg = sms.get('msg')
     return msg
 
-# 发送短信
-@main.route('/sms/',methods=['POST'])
-def sms():
-    phone = request.form.get('phone')
-    send = {
-        'smsId':requestSmsCode(phone)
-    }
-    return json.dumps(send)

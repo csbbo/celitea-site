@@ -6,6 +6,7 @@ from datetime import datetime
 from flask_login import login_required
 import json
 from .useJWT import make_jwt,verify_tokent
+from .sms import requestSmsCode,verifySmsCode
 
 # 测试
 @main.route('/test/',methods=['POST','GET'])
@@ -16,11 +17,8 @@ def test():
     user_agent = request.headers.get("User-Agent")
     content_type = request.headers.get('Cookie')
     authorization = request.headers.get('WWW-Authenticate')
-    # username = request.form.get('username')
-    # password = request.form.get('password')
     username = "chen"
     phone_num = "13978901767"
-    print("###################################")
     token = make_jwt(username,phone_num)
     token = token.decode('ascii')
     return json.dumps({'state':'shaobo yes',"token":token})
@@ -38,6 +36,7 @@ def regist():
     password = request.form.get('userPassword')
     phone_num = request.form.get('userPhoneNumber')
     sms = request.form.get('userIdentifyingCode')
+    # if verifySmsCode(phone_num,sms) == 'ok':
     if sms == '0000':
         user = User.query.filter(User.phone_num == phone_num).first()
         if user:            #手机号已经被使用
@@ -63,6 +62,17 @@ def login():
     else:
         return json.dumps({'loginStatus':'false'})
 
+
+
+# 发送短信
+@main.route('/sms/',methods=['POST'])
+def sms():
+    phone = request.form.get('phone')
+    send = {
+        'smsId':requestSmsCode(phone)
+    }
+    return json.dumps(send)
+
 # 注销
 @main.route('/logout/',methods=['POST'])
 def logout():
@@ -73,7 +83,7 @@ def logout():
     return json.dumps({'logout':'true'})
 
 # 报名接口
-@main.route('/apply_port/',methods=['POST'])
+@main.route('/apply/',methods=['POST'])
 def apply_port():
     token = request.headers.get('Authorization')
     token = token.encode('ascii')
@@ -82,8 +92,26 @@ def apply_port():
     else:
         return json.dump({'loginStatu':'fail'})
 
+# 报名表
+@main.route('/applications/',methods=['POST'])
+def applications():
+    pass
 
+# 管理页面
+@main.route('/admin/',methods=['GET'])
+def is_admin():
+    pass
         
+# 添加文章
+@main.route('/articles/',methods=['POST'])
+def articles():
+    pass
+
+# 修改文章
+@main.route('/mod_articles/',methods=['POST'])
+def mod_articles():
+    pass
+
 
 #########################################################
 # 作用于每次请求之前
