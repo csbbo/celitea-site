@@ -1,4 +1,4 @@
-from flask import render_template,request,redirect,session,g,url_for,current_app
+from flask import render_template,request,redirect,session,g,url_for,current_app,jsonify
 from . import main
 from ..models import User,Article,Apply
 from .. import db
@@ -9,22 +9,6 @@ from .useJWT import make_jwt,verify_tokent
 from .sms import requestSmsCode,verifySmsCode
 from sqlalchemy.ext.declarative import DeclarativeMeta
 
-class AlchemyEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj.__class__, DeclarativeMeta):
-            # an SQLAlchemy class
-            fields = {}
-            for field in [x for x in dir(obj) if not x.startswith('_') and x != 'metadata']:
-                data = obj.__getattribute__(field)
-                try:
-                    json.dumps(data) # this will fail on non-encodable values, like other classes
-                    fields[field] = data
-                except TypeError:
-                    fields[field] = None
-            # a json-encodable dict
-            return fields
-
-        return json.JSONEncoder.default(self, obj)
 
 # 测试
 @main.route('/test/',methods=['POST','GET'])
@@ -40,13 +24,18 @@ def test():
     token = make_jwt(username,phone_num)
     token = token.decode('ascii')
     name = "陈少波"
-    return json.dumps({'state':'shaobo yes','name':name})
+    return jsonify({'state':'shaobo yes','name':name})
 
 # 首页
 @main.route('/',methods=['GET'])
 def index():
+    # resp.headers['Content-Encoding'] = 'utf-8'
+    temp = []
     articles = Article.query.all()
-    return json.dumps(articles,cls=AlchemyEncoder)
+    for tmp in articles:
+        temp.append(tmp.to_json())
+    resp = jsonify(temp)
+    return resp
 
 # 注册
 @main.route('/regist/',methods=['POST'])
@@ -59,14 +48,14 @@ def regist():
     if sms == '0000':
         user = User.query.filter(User.phone_num == phone_num).first()
         if user:            #手机号已经被使用
-            return json.dumps({'registerStatus':'fail'})
+            return jsonify({'registerStatus':'fail'})
         else:
             user = User(username=username,password=password,phone_num=phone_num)
             db.session.add(user)
             db.session.commit()
-            return json.dumps({'registerStatus':'success'})
+            return jsonify({'registerStatus':'success'})
     else:
-        return json.dumps({'registerStatus':'wrongCode'})
+        return jsonify({'registerStatus':'wrongCode'})
 
 # 登录
 @main.route('/login/',methods=['POST'])
@@ -77,20 +66,20 @@ def login():
     if user and user.verify_password(password):
         token = make_jwt(user.username,phone_num)
         token = token.decode('ascii')
-        return json.dumps({'loginStatus':'true','userName':user.username,"token":token})
+        return jsonify({'loginStatus':'true','userName':user.username,"token":token})
     else:
-        return json.dumps({'loginStatus':'false'})
+        return jsonify({'loginStatus':'false'})
 
 
 
-# 发送短信
+# 申请验证码
 @main.route('/sms/',methods=['POST'])
 def sms():
     phone = request.form.get('phone')
     send = {
         'smsId':requestSmsCode(phone)
     }
-    return json.dumps(send)
+    return jsonify(send)
 
 # 注销
 @main.route('/logout/',methods=['POST'])
@@ -99,7 +88,7 @@ def logout():
     if out == 'true':
         if hasattr(g,'user'):
             session.pop('user_id')
-    return json.dumps({'logout':'true'})
+    return jsonify({'logout':'true'})
 
 # # 报名接口
 # @main.route('/apply/',methods=['POST'])
@@ -133,10 +122,11 @@ def applications():
                 skill=skill,want_learn=want_learn,think_celitea=think_celitea,avatar_url=avatar_url,user_id=user.id)
         db.session.add(apply)
         db.session.commit()
-        return json.dumps({'apply':'success'})
+        return jsonify({'apply':'success'})
     else:
-        return json.dumps({'loginStatu':'fail'})
+        return jsonify({'loginStatu':'fail'})
 
+# 报名列表
 @main.route('/applylist/',methods=['GET'])
 def applylist():
     token = request.headers.get('Authorization')
@@ -146,12 +136,16 @@ def applylist():
         user_phone = payload['phone_num']
         user = User.query.filter(User.phone_num==user_phone).first()
         if user.admin == 1:
+            temp = []
             alist = Apply.query.all()
-            return json.dumps(alist,cls=AlchemyEncoder)
+            for tmp in alist:
+                temp.append(tmp.to_json())
+            resp = jsonify(temp) 
+            return resp
         else:
-            return json.dumps({'isadmin':'no'})
+            return jsonify({'isadmin':'no'})
     else:
-        return json.dumps({'loginStatu':'fail'})
+        return jsonify({'loginStatu':'fail'})
 
 
 # 管理页面
@@ -175,11 +169,11 @@ def articles():
                         create_time=datetime.now())
             db.session.add(article)
             db.session.commit()
-            return json.dumps({'add_article':'success'})
+            return jsonify({'add_article':'success'})
         else:
-            return json.dumps({'add_article':'fail'})
+            return jsonify({'add_article':'fail'})
     else:
-        return json.dumps({'loginStatu':'fail'})
+        return jsonify({'loginStatu':'fail'})
 
 # 修改文章
 @main.route('/mod_articles/',methods=['POST'])

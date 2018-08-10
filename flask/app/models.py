@@ -37,6 +37,15 @@ class Article(db.Model):
     user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
     user = db.relationship('User',backref='article')
 
+    def to_json(self):
+        return {
+            'id':self.id,
+            'article_title':self.article_title,
+            'article':self.article,
+            'time':self.create_time,
+            'user_id':self.user_id
+        }
+
 class Apply(db.Model):
     __tablename__ = 'apply'
     name = db.Column(db.String(20), nullable=False)
@@ -52,3 +61,18 @@ class Apply(db.Model):
     create_time = db.Column(db.DateTime,primary_key=True,default=datetime.now)
     user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
     user = db.relationship('User',backref='apply')
+
+    def to_json(self):
+        return {
+            'name':self.name,
+            'stu_num':self.stu_num,
+            'phone':self.phone,
+            'email':self.email,
+            'introduction':self.introduction,
+            'skill':self.skill,
+            'want_learn':self.want_learn,
+            'think_celitea':self.think_celitea,
+            'avatar_url':self.avatar_url,
+            'create_time':self.create_time,
+            'user_id':self.user_id
+        }
