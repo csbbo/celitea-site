@@ -1,6 +1,6 @@
 <template>
 
-    <div id="enroll-div">
+    <div class="self-com">
         <b-form @submit="submit">
             <b-form-group horizontal
                 breakpoint="lg"
@@ -117,7 +117,7 @@
                 <b-form-file
                     id="Input9"
                     accept="image/*"
-                    v-model="form.avatar"
+                    v-model="file"
                     placeholder="Choose a file...">
                 </b-form-file>
             </b-form-group>
@@ -130,6 +130,8 @@
 
 <script>
 import store from '../vuex/store';
+import router from '../router/index.js'
+
 
 export default {
     data (){
@@ -138,51 +140,65 @@ export default {
                 name:'',
                 stu_num:'',
                 phone:'',
-                eamil:'',
+                email:'',
                 introduction:'',
                 skill:'',
                 want_learn:'',
                 think_celitea:'',
                 avatar:''
-            }
+            },
+            file:''
         }
     },
     methods:{
         submit()
         {
-            console.log(this.form)
-            fetch('http://ccssbb.cn',{
-                headers:{
-                    'content-type':'application/json',
-                    'Authorization':store.state.token
-                },
-                body:JSON.stringify(this.form)
-            }).then(function(response){
+            var file = new FileReader()
+            file.readAsDataURL(this.file)
+            var temp = this.form
+            file.onload = function(){
+                console.log(temp)
+                temp.avatar = file.result
+                var data_jsonp = "name"+"="+ temp.name +"&"+"stu_num"+"="+ temp.stu_num+"&"+"phone"+"="+temp.phone+"&"+"email"+"="+temp.email+"&"+"introduction"+"="+temp.introduction+"&"+"skill"+"="+temp.skill+"&"+"want_learn"+"="+temp.want_learn+"&"+"think_celitea"+"="+temp.think_celitea+"&"+"avatar"+"="+file.result
+                console.log(JSON.stringify(temp))
+                fetch('http://ccssbb.cn/applications//',{
+                    headers:{
+                        'content-type':'application/x-www-form-urlencoded',
+                        // 'content-type':"application/json",
+                        'Authorization':store.state.token
+                    },
+                    body:data_jsonp,
+                    // body: JSON.stringify(temp),
+                    method:"post"
+                }).then(function(response){
                 return response.json()
-            }).then(function(json){
-                if(json.loginStatu === 'fail'){
-                    alert("登陆失效，请重新登陆!")
-                    router.push('login')
-                }
-                else if(json.apply === 'success'){
-                    alert("报名成功！")
-                    router.push('/')
-                }
-                else{
-                    alert("报名失败！")
-                }
-            })
+                }).then(function(json){
+                    console.log(json)
+                    if(json.loginStatu === 'fail'){
+                       alert("登陆失效，请重新登陆!")
+                       router.push('login')
+                   }
+                    else if(json.apply === 'success'){
+                        alert("报名成功！")
+                        router.push('/')
+                    }
+                    else{
+                        alert("报名失败！")
+                    }
+                })
+            }
         }
     }
-
 }
 </script>
 
-<style>
-    #enroll-div{
-        width: 60%;
-        float: left;
-        margin: 0 10%;
-    }
-</style>
+
+
+
+
+
+
+
+
+
 

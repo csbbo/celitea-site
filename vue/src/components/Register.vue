@@ -1,5 +1,5 @@
 <template>
-  <div id="register-div">
+  <div class="self-com">
     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
         <b-form-group id="exampleInputGroup1"
                     label="电话号码:"
@@ -103,10 +103,3 @@ export default {
 </script>
 
 
-<style>
-    #register-div{
-        width: 60%;
-        float: left;
-        margin: 0 10%;
-    }
-</style>

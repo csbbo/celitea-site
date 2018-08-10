@@ -1,5 +1,5 @@
 <template>
-    <div class="article-div">
+    <div class="self-com">
         <b-card title="Card title" sub-title="Card subtitle">
         <p class="card-text">
             Some quick example text to build on the 
@@ -12,12 +12,4 @@
     </div>
 </template>
 
-<style>
-    .article-div{
-        margin: 0;
-        width:80%;
-        float: left;
-        border-left: 1px solid #cacaca;
-    }
-</style>
 
