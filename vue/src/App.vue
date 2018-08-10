@@ -2,7 +2,6 @@
   <div id="app"> 
     <nav-bar></nav-bar>
     <main>
-      <aside-part></aside-part>
       <router-view></router-view>
     </main>
   </div>
@@ -10,16 +9,28 @@
 
 <script>
 import NavBar from './components/navbar.vue'
-import Aside from './components/aside.vue'
 
 export default {
   name: 'app',
   components:{ 
     'nav-bar':NavBar,
-    'aside-part':Aside
   }
 }
 </script>
 
 <style>
+@media screen and (max-width:600px) {
+  .self-com{
+   width: 80%;
+   margin: 0 10%
+ }
+}
+
+@media screen and (min-width: 601px){
+  .self-com{
+    width:60%;
+    margin: 0 20%
+  }
+}
+ 
 </style>

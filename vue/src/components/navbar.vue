@@ -1,17 +1,25 @@
 <template>
     <div>
     <b-navbar toggleable="md" type="dark" variant="info">
-      <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-      <b-navbar-brand href="#/">NavBar</b-navbar-brand>
-        <b-collapse is-nav id="nav-collapse">
+       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+        <b-navbar-brand href="#/">Celitea</b-navbar-brand>
+        <b-collapse is-nav id="nav_collapse">
+            <b-navbar-nav>
+                <b-nav-item  @click="enroll()">报名</b-nav-item>
+                <b-nav-item href="#">关于我们</b-nav-item>
+                <b-nav-item href="#">新手指导</b-nav-item>
+            </b-navbar-nav>
+            <b-navbar-nav class="ml-auto" >
+                <b-nav-item-dropdown id="user_status" right>
+                        <template slot="button-content">
+                            <em>{{fi}}</em>
+                        </template>
+                    <b-dropdown-item @click="login()">{{ se }}</b-dropdown-item>
+                    <b-dropdown-item @click="Signout()">{{ th }}</b-dropdown-item>
+                </b-nav-item-dropdown>
+            </b-navbar-nav>   
         </b-collapse>
-        <b-nav-item-dropdown id="user_status" right>
-            <template slot="button-content">
-                <em>{{fi}}</em>
-            </template>
-          <b-dropdown-item @click="login()">{{ se }}</b-dropdown-item>
-          <b-dropdown-item @click="Signout()">{{ th }}</b-dropdown-item>
-        </b-nav-item-dropdown>
+        
     </b-navbar>
     </div>
 </template>
@@ -22,7 +30,8 @@ import router from '../router/index.js'
 
 export default {
     data(){
-        if(store.state.userName === ''){
+        store.commit('init_login_status')
+        if(store.state.token === ''){
             return {
                 se:"login",
                 th:"register",
@@ -46,11 +55,22 @@ export default {
         },
         Signout()
         {
-            if(localStorage.token === '')
+            if(store.state.token === '')
                 router.push('register')
             else{
                 store.commit('clear_login_status')
                 router.push('/') 
+            }
+        },
+        enroll()
+        {
+            if(store.state.token === ''){
+                alert("请登陆之后再操作")
+                this.$router.push('')  
+            }
+            else {
+                this.$router.push('enroll')
+                console.log("good enroll")
             }
         }
     },
@@ -64,7 +84,7 @@ export default {
             else {
                 this.se = "Main",
                 this.th = "Signout"
-                return localStorage.userName
+                return store.state.userName
             }   
                 
         }

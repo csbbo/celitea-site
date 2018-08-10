@@ -20,6 +20,16 @@ const store = new Vuex.Store({
             state.userName = ''
             state.token = ''
             console.log(state)
+        },
+        init_login_status(state){
+            if(localStorage.token === undefined){
+                state.userName = ''
+                state.token = ''
+            }
+            else{
+                state.userName = localStorage.userName
+                state.token = localStorage.token
+            }
         }
     },
     getters:{

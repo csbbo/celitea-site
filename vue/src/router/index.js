@@ -4,6 +4,7 @@ import index from '../components/index.vue'
 import register from '../components/register.vue'
 import login from '../components/login.vue'
 import enroll from '../components/enroll.vue'
+import admin from '../components/admin.vue'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
       path:'/enroll',
       name:'enroll',
       component:enroll
+    },
+    {
+      path:'/admin',
+      name:'admin',
+      component:admin
     }
   ]
 })

@@ -9,6 +9,7 @@ import store from './vuex/store'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+
 Vue.use(BootstrapVue)
 Vue.use(Vuex)
 Vue.config.productionTip = false
