@@ -114,9 +114,9 @@ def applications():
                 skill=skill,want_learn=want_learn,think_celitea=think_celitea,avatar_url=avatar_url,user_id=user.id)
         db.session.add(apply)
         db.session.commit()
-        return json.dump({'apply':'success'})
+        return json.dumps({'apply':'success'})
     else:
-        return json.dump({'loginStatu':'fail'})
+        return json.dumps({'loginStatu':'fail'})
 
 # 管理页面
 @main.route('/admin/',methods=['GET'])
@@ -134,15 +134,15 @@ def articles():
     if payload:
         user_phone = payload['phone_num']
         user = User.query.filter(User.phone_num==user_phone).first()
-        if user.admin == 'True':
+        if user.admin == 1:
             article = Article(article_title=article_title,article=article,user_id=user.id)
             db.session.add(article)
             db.session.commit()
-            return json.dump({'add_article':'success'})
+            return json.dumps({'add_article':'success'})
         else:
-            return json.dump({'add_article':'fail'})
+            return json.dumps({'add_article':'fail'})
     else:
-        return json.dump({'loginStatu':'fail'})
+        return json.dumps({'loginStatu':'fail'})
 
 # 修改文章
 @main.route('/mod_articles/',methods=['POST'])

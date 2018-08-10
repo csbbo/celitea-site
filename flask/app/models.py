@@ -41,7 +41,7 @@ class Apply(db.Model):
     __tablename__ = 'apply'
     name = db.Column(db.String(20), nullable=False)
     stu_num = db.Column(db.String(8), nullable=False)
-    phone = db.Column(db.Integer,nullable=False)
+    phone = db.Column(db.String(11),nullable=False)
     email = db.Column(db.String(30),nullable=False)
     introduction = db.Column(db.String(60),nullable=False)
     skill = db.Column(db.Text,nullable=False)
