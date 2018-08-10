@@ -7,6 +7,24 @@ from flask_login import login_required
 import json
 from .useJWT import make_jwt,verify_tokent
 from .sms import requestSmsCode,verifySmsCode
+from sqlalchemy.ext.declarative import DeclarativeMeta
+
+class AlchemyEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj.__class__, DeclarativeMeta):
+            # an SQLAlchemy class
+            fields = {}
+            for field in [x for x in dir(obj) if not x.startswith('_') and x != 'metadata']:
+                data = obj.__getattribute__(field)
+                try:
+                    json.dumps(data) # this will fail on non-encodable values, like other classes
+                    fields[field] = data
+                except TypeError:
+                    fields[field] = None
+            # a json-encodable dict
+            return fields
+
+        return json.JSONEncoder.default(self, obj)
 
 # 测试
 @main.route('/test/',methods=['POST','GET'])
@@ -27,7 +45,7 @@ def test():
 @main.route('/',methods=['GET'])
 def index():
     articles = Article.query.all()
-    return json.dumps(articles)
+    return json.dumps(articles,cls=AlchemyEncoder)
 
 # 注册
 @main.route('/regist/',methods=['POST'])
@@ -82,15 +100,15 @@ def logout():
             session.pop('user_id')
     return json.dumps({'logout':'true'})
 
-# 报名接口
-@main.route('/apply/',methods=['POST'])
-def apply_port():
-    token = request.headers.get('Authorization')
-    token = token.encode('ascii')
-    if verify_tokent(token):
-        return json.dump({'loginStatu':'success'})
-    else:
-        return json.dump({'loginStatu':'fail'})
+# # 报名接口
+# @main.route('/apply/',methods=['POST'])
+# def apply_port():
+#     token = request.headers.get('Authorization')
+#     token = token.encode('ascii')
+#     if verify_tokent(token):
+#         return json.dump({'loginStatu':'success'})
+#     else:
+#         return json.dump({'loginStatu':'fail'})
 
 # 报名表
 @main.route('/applications/',methods=['POST'])
@@ -118,15 +136,30 @@ def applications():
     else:
         return json.dumps({'loginStatu':'fail'})
 
+@main.route('/applylist/',methods=['GET'])
+def applylist():
+    token = request.headers.get('Authorization')
+    if payload:
+        user_phone = payload['phone_num']
+        user = User.query.filter(User.phone_num==user_phone).first()
+        if user.admin == 1:
+            alist = Apply.query.all()
+            return json.dumps(alist,cls=AlchemyEncoder)
+        else:
+            return json.dumps({'isadmin':'no'})
+    else:
+        return json.dumps({'loginStatu':'fail'})
+
+
 # 管理页面
-@main.route('/admin/',methods=['GET'])
-def is_admin():
-    pass
+# @main.route('/admin/',methods=['GET'])
+# def is_admin():
+#     pass
         
 # 添加文章
 @main.route('/articles/',methods=['POST'])
 def articles():
-    article_title = request.form.get('article_title')
+    article_title = "title"
     article = request.form.get('article')
     token = request.headers.get('Authorization')
     token = token.encode('ascii')
@@ -135,7 +168,8 @@ def articles():
         user_phone = payload['phone_num']
         user = User.query.filter(User.phone_num==user_phone).first()
         if user.admin == 1:
-            article = Article(article_title=article_title,article=article,user_id=user.id)
+            article = Article(article_title=article_title,article=article,user_id=user.id,\
+                        create_time=datetime.now())
             db.session.add(article)
             db.session.commit()
             return json.dumps({'add_article':'success'})

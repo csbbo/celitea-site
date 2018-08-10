@@ -47,7 +47,7 @@ class Apply(db.Model):
     skill = db.Column(db.Text,nullable=False)
     want_learn = db.Column(db.Text,nullable=False)
     think_celitea = db.Column(db.Text,nullable=False)
-    avatar_url = db.Column(db.String(20),nullable=False)
+    avatar_url = db.Column(db.Text,nullable=False)
 
     create_time = db.Column(db.DateTime,primary_key=True,default=datetime.now)
     user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
