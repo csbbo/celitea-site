@@ -49,7 +49,7 @@
 {
     logout:'true'
 }
-//报名表
+//报名表借口http://ccssbb.cn/applications/
 请求字段:
 name
 stu_num
@@ -68,7 +68,7 @@ token认证失败即未登录状态返回
 报名成功返回
 {'apply':'success'}
 
-//添加文章
+//添加文章接口http://ccssbb.cn/articles/
 请求字段:
 article_title  //文章标题
 article        //文章内容
