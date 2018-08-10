@@ -139,6 +139,8 @@ def applications():
 @main.route('/applylist/',methods=['GET'])
 def applylist():
     token = request.headers.get('Authorization')
+    token = token.encode('ascii')
+    payload = verify_tokent(token)
     if payload:
         user_phone = payload['phone_num']
         user = User.query.filter(User.phone_num==user_phone).first()
