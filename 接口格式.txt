@@ -82,3 +82,12 @@ token认证失败即未登录状态返回
 
 管理员添加文章成功
 {'add_article':'success'}
+
+//查看报名列表接口http://ccssbb.cn/applylist/
+get请求，
+Authorization  //token 在请求头部
+
+{'loginStatu':'fail'}//非登录状态返回
+{'isadmin':'no'}     //非管理员返回
+成功将返回一个列表大概长这样
+[{"want_learn": "\\u90a3\\u53ef\\u5c31\\u591a\\u4e86", "skill": "\\u83dc\\u9e1f\\u4e00\\u4e2a", "avatar_url": "shaobodasfaaaaasdfsafsafassssssssssssssssssssssssssssssssssssssssssssfdsafffffffffffffffffffffffffffffffffffffffffffffffffffffffffffsadfasdfasdf", "stu_num": "16101202", "introduction": "\\u6211\\u4e0d\\u6b7b\\u5c4c\\u4e1d", "create_time": null, "user_id": 2, "think_celitea": "\\u725b\\u903c", "query_class": null, "name": "\\u9648\\u5b9a\\u6dee", "user": null, "phone": "13978901767", "email": "chenshaobo@gmail.com", "query": null}]

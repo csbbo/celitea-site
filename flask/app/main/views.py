@@ -39,7 +39,8 @@ def test():
     phone_num = "13978901767"
     token = make_jwt(username,phone_num)
     token = token.decode('ascii')
-    return json.dumps({'state':'shaobo yes',"token":token})
+    name = "陈少波"
+    return json.dumps({'state':'shaobo yes','name':name})
 
 # 首页
 @main.route('/',methods=['GET'])
