@@ -86,9 +86,9 @@ def sms():
 def logout():
     out = request.form.get('logout')
     if out == 'true':
-        if hasattr(g,'user'):
-            session.pop('user_id')
-    return jsonify({'logout':'true'})
+        return jsonify({'logout':'true'})
+    else:
+        return jsonify({'logout':'false'})
 
 # # 报名接口
 # @main.route('/apply/',methods=['POST'])
