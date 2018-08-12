@@ -179,3 +179,41 @@ get请求
 
 失败返回:  
 `'smsId':'这个是由第三方短信api提供者返回,是什么不记得了'`
+
+--------------
+#### 获取某一篇文章接口
+`http://ccssbb.cn/apply_article/`
+
+请求字段:  
+```
+{'aritcle_id':xxx}
+{'Authorization':'token信息'}  #在请求头部  
+```
+
+```
+{'loginStatu':'fail'} #未登录
+{'apply_article':'fail'} #非管理员
+{
+    'article': '这是一篇文章',
+    'article_title': 'title',
+    'id': 2,
+    'time': 'Fri, 10 Aug 2018 21:31:40 GMT',
+    'user_id': 1
+} #成功
+```
+
+---------------------------
+#### 修改某一篇文章接口
+`http://ccssbb.cn/mod_article/`
+
+请求字段:  
+```
+{'article':'xxx'} #修改后的文章内容
+{'aritcle_id':xxx} #要修改的文章id
+{'Authorization':'token信息'}  #在请求头部
+```
+```
+{'loginStatu':'fail'} #未登录  
+{'mod_article':'fail'} #非管理员  
+{'mod_article':'success'} #修改成功
+```

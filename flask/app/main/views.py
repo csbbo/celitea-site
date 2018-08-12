@@ -37,6 +37,7 @@ def index():
     resp = jsonify(temp)
     return resp
 
+
 # 注册
 @main.route('/regist/',methods=['POST'])
 def regist():
@@ -176,24 +177,45 @@ def articles():
         return jsonify({'loginStatu':'fail'})
 
 # 修改文章
-@main.route('/mod_articles/',methods=['POST'])
+@main.route('/mod_article/',methods=['POST'])
 def mod_articles():
-    pass
+    article_title = "title"
+    article_content = request.form.get('article')
+    article_id = request.form.get('aritcle_id')
+    token = request.headers.get('Authorization')
+    token = token.encode('ascii')
+    payload = verify_tokent(token)
+    if payload:
+        user_phone = payload['phone_num']
+        user = User.query.filter(User.phone_num==user_phone).first()
+        if user.admin == 1:
+            article = Article.query.get(article_id)
+            article.title = article_title
+            article.article = article_content
+            db.session.add(article)
+            db.session.commit()
+            return jsonify({'mod_article':'success'})
+        else:
+            return jsonify({'mod_article':'fail'})
+    else:
+        return jsonify({'loginStatu':'fail'})
+
+# 获取某一篇文章
+@main.route('/apply_article/',methods=['POST'])
+def get_article():
+    article_id = request.form.get('aritcle_id')
+    token = request.headers.get('Authorization')
+    token = token.encode('ascii')
+    payload = verify_tokent(token)
+    if payload:
+        user_phone = payload['phone_num']
+        user = User.query.filter(User.phone_num==user_phone).first()
+        if user.admin == 1:
+            article = Article.query.get(article_id)
+            return jsonify(article.to_json())
+        else:
+            return jsonify({'apply_article':'fail'})
+    else:
+        return jsonify({'loginStatu':'fail'})
 
 
-#########################################################
-# 作用于每次请求之前
-# @main.before_request
-# def my_before_request():
-#         user_id = session.get('user_id')
-#         if user_id:         #本次请求用户存在
-#                 user = User.query.filter(User.id==user_id).first()
-#                 if user:    #数据库中存在该用户
-#                     g.user = user #将该用户置入全局变量g
-
-# # 上下文处理器---在模板中使用
-# @main.context_processor
-# def my_context_processor():
-#         if hasattr(g,'user'):
-#                 return {'user':g.user}
-#         return {}
