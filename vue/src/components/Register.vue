@@ -36,7 +36,7 @@
                          required
                         placeholder="Enter code">
             </b-form-input>
-            <b-button type="getIdentifyCode">获取</b-button>
+            <b-button type="getIdentifyCode" @click="getIdentifyCode">获取</b-button>
         </b-form-group>
         <b-button type="提交" variant="primary">Submit</b-button>
         <b-button type="重置" variant="danger">Reset</b-button>
@@ -97,6 +97,23 @@ export default {
       /* Trick to reset/clear native browser form validation state */
       this.show = false;
       this.$nextTick(() => { this.show = true });
+    },
+    getIdentifingCode(){
+      var tel = "phone"+ "=" + userPhoneNumber
+      fetch('http://ccssbb.cn/sms/',{
+        headers:{
+          'content-type':'application/x-www-form-urlencoded'
+        },
+        method:'post',
+        body:tel
+      }).then(function(response){
+        return response.json()
+      }).then(function(json){
+        if(json.smsId === 'ok')
+          alert("获取成功！")
+        else 
+          alert("获取失败！")
+      }) 
     }
   }
 }
