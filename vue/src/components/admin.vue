@@ -44,7 +44,13 @@
             </b-tab>
             <b-tab title="修改文章">
                 <br>
-                <div>222</div>
+                <b-form inline>
+                    <label class="sr-only1" for="getArticleId">Id</label>
+                    <b-input class="mb-2 mr-sm-2 mb-sm-0" v-model="article_id" id="getArticleId" placeholder="article id" />
+                    <b-button variant="primary" @click="get_article">Get</b-button>
+                </b-form>
+                <div ref="editor_1" style="text-align:left"></div>
+                <b-button @click="put_article">submit</b-button>
             </b-tab>
         </b-tabs>
     </div>
@@ -61,6 +67,8 @@ export default {
             return {
                 isBusy:false,
                 editorContent:'',
+                article_id:'',
+                editorContent_1:'test',
                 fields:[
                 '头像',
                 '姓名',
@@ -76,20 +84,27 @@ export default {
             }         
     },
     mounted(){
-        var editor = new E(this.$refs.editor)
+        window.editor = new E(this.$refs.editor)
         editor.customConfig.onchange = (html) =>{
             this.editorContent = html
         }
         editor.create()
+        window.editor_1 = new E(this.$refs.editor_1)
+        editor_1.customConfig.onchange = (html) =>{
+            this.editorContent_1 = html
+        }
+        editor_1.create()
+        
     },
     methods:{
         submit(){
             fetch('http://ccssbb.cn/articles/',{
                 headers:{
-                    "Authorization":store.state.token
+                    "Authorization":store.state.token,
+                    'content-type':'application/x-www-form-urlencoded',
                 },
                 method:"post",
-                body:this.editorContent
+                body:'article'+'='+this.editorContent
             }).then(function(response){
                 return response.json()
             }).then(function(json){
@@ -135,6 +150,55 @@ export default {
                 
             }
             )             
+        }
+        ,
+        get_article(){
+            console.log(store.state.token)
+            fetch('http://ccssbb.cn/apply_article/',{
+                headers:{
+                    'Authorization':store.state.token,
+                    'content-type':'application/x-www-form-urlencoded',
+                },
+                method:'post',
+                body:'aritcle_id'+ '=' + this.article_id
+            }).then(function(response){
+                return response.json()
+            }).then(function(json){
+                if(json.loginStatu === 'fail'){
+                    alert('请登录')
+                }
+                else if(json.apply_article === 'fail'){
+                    alert('not admin!')
+                }
+                else{
+                    window.editor_1.txt.html('<p>'+json.article_title +'</p>'+'<p>'+json.article+'</p>')
+                }
+            })
+        },
+        put_article(){
+            fetch('http://ccssbb.cn/mod_article/',{
+                headers:{
+                    'Authorization':store.state.token,
+                    'content-type':'application/x-www-form-urlencoded',
+                },
+                method:'post',
+                body:'article'+'='+this.editorContent_1+'&'+'aritcle_id'+'='+this.article_id
+            }).then(function(response){
+                return response.json()
+            }).then(function(json){
+                if(json.loginStatu === 'fail'){
+                    alert('请登录')
+                }
+                else if(json.mod_article === 'fail'){
+                    alert('not admin!')
+                }
+                else if(json.mod_article === 'success'){
+                    alert('success')
+                }
+                else{
+                    alert('fail')
+                }
+            })
         }
     }
 }
