@@ -180,7 +180,7 @@ export default {
                    }
                     else if(json.apply === 'success'){
                         alert("报名成功！")
-                        router.push('/')
+                        router.push('index')
                     }
                     else{
                         alert("报名失败！")

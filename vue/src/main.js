@@ -3,11 +3,12 @@
 import Vue from 'vue'
 import BootstrapVue from "bootstrap-vue"
 import App from './App'
-import router from './router'
+import router from './router/index.js'
 import Vuex from 'vuex'
 import store from './vuex/store'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+
 
 
 Vue.use(BootstrapVue)

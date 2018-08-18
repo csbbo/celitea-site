@@ -1,11 +1,10 @@
 <template>
     <div class="self-com">
         <b-card  v-for="item in items" :key="item.id"  :title="item.article_title"  :sub-title="item.time">
-        <p class="card-text">
-            {{item.article}}    
+        <p class="card-text" v-html="item.article">
         </p>
-        <a href="#" class="card-link">Card link</a>
-        <b-link href="#" class="card-link">Another link</b-link>
+        <a :href="'#/'+item.id" class="card-link">Card link</a>
+
     </b-card>
     </div>
 </template>

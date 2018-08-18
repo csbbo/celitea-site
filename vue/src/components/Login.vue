@@ -60,7 +60,7 @@ export default {
           localStorage.token = json.token
           store.commit('note_login_status',json.userName)
           alert("Login Success !")
-          router.push('/')
+          router.push('index')
         }
         else
           alert("login fail!")
