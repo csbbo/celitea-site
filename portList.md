@@ -1,219 +1,182 @@
+目标url:celitea.cn
 
-#### 服务器首页文章返回
+主页
 ```
-[
-    {
-        "article": "文章内容",
-        "article_title": "文章标题",
-        "id": 1,
-        "time": "Fri, 10 Aug 2018 20:39:10 GMT",
-        "user_id": 2
-    },
-    {
-        "article": "文章内容",
-        "article_title": "文章标题",
-        "id": 2,
-        "time": "Fri, 10 Aug 2018 20:40:14 GMT",
-        "user_id": 2
-    },
-    {
-        "article": "文章内容",
-        "article_title": "文章标题",
-        "id": 3,
-        "time": "Fri, 10 Aug 2018 20:41:24 GMT",
-        "user_id": 2
-    }
-]
-```
--------------------------------
-### 注册
-#### 客户端注册信息发送
-```
-{
-    user:{
-        userName:'',
-        userPassword:'',
-        userPhoneNumber:'',
-        userIdentifyingCode:''
-    }
+get "/"
+return{
+    data
 }
 ```
-#### 服务器注册状态返回
+注册
 ```
-{
-    registerStatus:'success'|| registerStatus:'fail'|| registerStatus :'wrongCode'
+post "/regist/" args(userName,userPassword,userPhoneNumber,userIdentifyingCode)
+return{
+    {'registerStatus':'phone_was_us'}
+    or
+    {'registerStatus':'success'}
+    or
+    {'registerStatus':'wrongCode'}
+}
+
+```
+登录
+```
+post "/login/" args(userPhoneNumber,userPassword)
+return{
+    {'userName':user.username,'userRole':user.role.id,'token':token}
+    or
+    {'login':'fail'}
 }
 ```
-----------------------------
-### 登录
-#### 客户端登陆信息发送
+报名
 ```
-{
-    user:{
-        userPhoneNumber:'',
-        userPassword:''
-    }
+post "/applications/" args(name,stu_num,phone,email,introduction,skill,want_learn,think_celitea) header(Authorization)
+return{
+    {'applications':'success'}
+    or
+    {'applications':'apply_exist'}
+    or
+    {'applications':'noLogin'}
+}
+```
+查看报名列表
+```
+post "/apply_list/" args(apply_state) header(Authorization)
+return{
+    data
+    or
+    {'apply_list':'permissiondeny'}
+    or
+    {'apply_list':'noLogin'}
+}
+>apply_state="all_apply"    #请求所有报名表
+>apply_state="notpass_apply"    #请求未通过报名表
+>apply_state="all_apply"    #请求已经通过报名表
+>apply_list = 其他            #请求待处理报名表
+```
+同意申请
+```
+post "/apply_pass/" args(apply_id) header(Authorization)
+return{
+    {'apply_pass':'sucess'}
+    or
+    {'apply_pass':'permissiondeny'}
+    or
+    {'apply_pass':'noLogin'}
+}
+```
+拒绝申请
+```
+post "/apply_notpass/" args(apply_id) header(Authorization)
+return{
+    {'apply_notpass':'success'}
+    or
+    {'apply_notpass':'permissiondeny'}
+    or
+    {'apply_notpass':'noLogin'}
 }
 ```
 
-#### 服务器登陆信息返回
+查看某个报名表内容
 ```
-{
-    loginStatus:'success'|| loginStatus:'fail'
+post "/apply_detail/" args(apply_id) header(Authorization)
+return{
+    data
+    or
+    {'apply_detail':'permissiondeny'}
+    or
+    {'apply_detail':'noLogin'}
+}
+```
+添加文章
+```
+post "/add_articles/" args(article) header(Authorization)
+return{
+    {'add_article':'success'}
+    or
+    {'add_article':'permissiondeny'}
+    or
+    {'add_article':'noLogin'}
+}
+```
+修改文章
+```
+post "/modify_article/" args(article,article_id)  header(Authorization)
+return{
+    {'modify_article':'formal_error'}
+    or
+    {'modify_article':'success'}
+    or
+    {'modify_article':'permissiondeny'}
+    or
+    {'modify_article':'noLogin'}
+}
+```
+获取某一篇文章及其上一篇和下一篇文章
+```
+post "/article_detail/" args(article_id)
+return{
+    data
 }
 ```
 
-#### 服务器登陆状态返回
+获取文章列表
 ```
-{
-    userStatis:'true' || userStatis:'false',
-    userName:''
+# 可以从首页接口提取
+```
+添加个人简介
+```
+post "/add_bio/" args(bio) header(Authorization)
+return{
+    {'add_bio':'sucess'}
+    or
+    {'add_bio':'noLogin'}
 }
 ```
-------------
-### 注销
-#### 客户端注销状态发送
+添加和修改用户头像
 ```
-{
-    logout:'true'
+post "/upload_avatar/" args(avatar) header(Authorization)
+return{
+    {'upload_avatar':'sucess'}
+    or
+    {'upload_avatar':'noLogin'}
 }
 ```
-#### 服务器注销状态返回
+将用户设置为成员
 ```
-{
-    logout:'true'||logout:'false'
+post "/to_member/" args(user_id) header(Authorization)
+return{
+    {'to_member':'success'}
+    or
+    {'to_member':'permissiondeny'}
+    or
+    {'to_member':'noLogin'}
 }
 ```
----------------
-#### 报名表接口
-`http://ccssbb.cn/applications/`
-
-请求字段:
+申请验证码
 ```
-name
-stu_num
-phone
-email
-introduction
-skill
-want_learn
-think_celitea
-avatar
-Authorization  //token 在请求头部
+post "/sms/" args(phone)
+return{
+    data
+}
 ```
-token认证失败即未登录状态返回  
-`{'loginStatu':'fail'}`
-
-报名成功返回  
-`{'apply':'success'}`  
-
--------------
-#### 添加文章接口
-`http://ccssbb.cn/articles/`  
-请求字段:
+用户列表
 ```
-{'article':'xxx'}        //文章内容
-{'Authorization':'token信息'}  #在请求头部
+get "/user_list/" header(Authorization)
+return{
+    data
+    or
+    {'user_list':'permissiondeny'}
+    or
+    {'user_list':'noLogin'}
+}
 ```
-
-token认证失败即未登录状态返回  
-`{'loginStatu':'fail'}`
-
-非管理员文章添加失败  
-`{'add_article':'fail'}`
-
-管理员添加文章成功  
-`{'add_article':'success'}`  
-
----------------------------
-#### 查看报名列表接口
-`http://ccssbb.cn/applylist/`  
-
-get请求  
-`{'Authorization':'token信息'}`  #在请求头部
-
-`{'loginStatu':'fail'}`#非登录状态返回  
-
-`{'isadmin':'no'}`  #非管理员返回  
-
-成功将返回一个列表大概长这样:
+用户信息
 ```
-[
-    {
-        'avatar_url':'xxx','create_time': 'Fri, 10 Aug 2018 09:40:22 GMT',
-        'email':'chenshaobo@gmail.com',
-        'introduction': 'xxx',
-        'name': 'xxx',
-        'phone': 2147483647,
-        'skill': 'xxx',
-        'stu_num': '16101202',
-        'think_celitea': 'xxx',
-        'user_id': 1,
-        'want_learn': 'xxx'
-    },
-    {
-        'avatar_url':'xxx',
-        'create_time': 'Fri, 10 Aug 2018 09:42:29 GMT',  
-        'email':'xxx',
-        'introduction': 'xxx',
-        'name': 'xxx',
-        'phone': xxx,
-        'skill': 'xxx',  
-        'stu_num': 'xxx',
-        'think_celitea': 'xxx',
-        'user_id': 1,
-        'want_learn': 'xxx'
-    }
-]
-```
-
--------------------------
-#### 申请短信验证码接口
-`http://ccssbb.cn/sms/`
-
-请求字段:  
-`{'phone':'139xxxxxxxx'}`
-
-申请成功返回:  
-`'smsId':'ok'`  
-
-失败返回:  
-`'smsId':'这个是由第三方短信api提供者返回,是什么不记得了'`
-
---------------
-#### 获取某一篇文章接口
-`http://ccssbb.cn/apply_article/`
-
-请求字段:  
-```
-{'aritcle_id':xxx}
-{'Authorization':'token信息'}  #在请求头部  
-```
-
-```
-{'loginStatu':'fail'} #未登录
-{'apply_article':'fail'} #非管理员
-{
-    'article': '这是一篇文章',
-    'article_title': 'title',
-    'id': 2,
-    'time': 'Fri, 10 Aug 2018 21:31:40 GMT',
-    'user_id': 1
-} #成功
-```
-
----------------------------
-#### 修改某一篇文章接口
-`http://ccssbb.cn/mod_article/`
-
-请求字段:  
-```
-{'article':'xxx'} #修改后的文章内容
-{'aritcle_id':xxx} #要修改的文章id
-{'Authorization':'token信息'}  #在请求头部
-```
-```
-{'loginStatu':'fail'} #未登录  
-{'mod_article':'fail'} #非管理员  
-{'mod_article':'success'} #修改成功
+get "/user_detail/" header(Authorization)
+return{
+    data
+    or
+    {'user_detail':'noLogin'}
+}
 ```

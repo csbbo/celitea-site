@@ -24,8 +24,8 @@ class Config:
 class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
-        'mysql://chen:chenshaobo@localhost:3306/celitea_db'
-        # 'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
+        'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
+        # 'mysql://chen:chenshaobo@localhost:3306/celitea_db'
 
 
 class TestingConfig(Config):
